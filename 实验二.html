@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2024国庆节江苏省旅游情况分析</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            background-color: #a53a3a;
+            color: white;
+            padding: 0px;
+        }
+        header img {
+            max-width: 100%;
+            height: auto;
+            margin-right: 20px; 
+        }
+        section {
+            margin: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .flex-container {
+            display: flex;
+            align-items: flex-start; /* 垂直对齐方式 */
+        }
+        table {
+            width: 30%; /* 设置表格宽度 */
+            margin: 20px 200px 20px 200px; /* 调整表格边距 */
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #bc5c1d;
+            color: white;
+        }
+        #myChart {
+            width: 400px; /* 自定义宽度 */
+            height: 400px; /* 自定义高度 */
+            margin-left: 10px; /* 减小折线图与表格之间的距离 */
+            margin-right: 50px; /* 增大折线图与右边界之间的距离 */
+        }
+        form {
+            margin: 20px 0;
+        }
+        .note {
+            color: #ff5733; /* 自定义颜色 */
+            font-size: 16px; /* 可选：调整字体大小 */
+            margin-top: 10px; /* 可选：调整与其他元素的间距 */
+        }
+        .circle-button {
+            width: 30px; /* 按钮的宽度 */
+            height: 30px; /* 按钮的高度 */
+            border-radius: 50%; /* 圆形 */
+            background-color: rgba(20, 26, 141, 0); 
+            color: white; /* 文字颜色 */
+            border: none; /* 去掉边框 */
+            cursor: pointer; /* 鼠标悬停时显示为手型 */
+            position: absolute; /* 绝对定位 */
+            top: 100px; /* 距离顶部的位置 */
+            left: 100px; /* 距离左边的位置 */
+        }
+        
+        .little-button {
+            width: 20px; /* 按钮的宽度 */
+            height: 20px; /* 按钮的高度 */
+            border-radius: 50%; /* 圆形 */
+            background-color: rgba(20, 26, 141, 0); 
+            color: white; /* 文字颜色 */
+            border: none; /* 去掉边框 */
+            cursor: pointer; /* 鼠标悬停时显示为手型 */
+            position: absolute; /* 绝对定位 */
+            top: 100px; /* 距离顶部的位置 */
+            left: 100px; /* 距离左边的位置 */
+        }
+
+        .long-button {
+            width: 20px; /* 按钮的宽度 */
+            height: 50px; /* 按钮的高度 */
+            border-radius: 25%; 
+            background-color: #ff5733;
+            background-color: rgba(20, 26, 141, 0); 
+            color: white; /* 文字颜色 */
+            border: none; /* 去掉边框 */
+            cursor: pointer; /* 鼠标悬停时显示为手型 */
+            position: absolute; /* 绝对定位 */
+            top: 100px; /* 距离顶部的位置 */
+            left: 100px; /* 距离左边的位置 */
+        }
+
+        .wide-button {
+            width: 50px; /* 按钮的宽度 */
+            height: 20px; /* 按钮的高度 */
+            border-radius: 25%; /* 圆形 */
+            background-color: #ff5733;
+            background-color: rgba(20, 26, 141, 0);
+            color: white; /* 文字颜色 */
+            border: none; /* 去掉边框 */
+            cursor: pointer; /* 鼠标悬停时显示为手型 */
+            position: absolute; /* 绝对定位 */
+            top: 100px; /* 距离顶部的位置 */
+            left: 100px; /* 距离左边的位置 */
+        }
+
+        /* 文本框样式 */
+        .modal {
+            display: none; /* 初始隐藏 */
+            position: fixed; /* 固定定位 */
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%); /* 居中 */
+            background-color: white; /* 背景颜色 */
+            border: 1px solid #ccc; /* 边框 */
+            padding: 20px; /* 内边距 */
+            z-index: 1000; /* 置于顶部 */
+        }
+
+        /* 背景遮罩样式 */
+        .overlay {
+            display: none; /* 初始隐藏 */
+            position: fixed; /* 固定定位 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0); /* 完全透明无色 */
+            backdrop-filter: blur(5px); /* 高斯模糊效果，数值越大模糊越强 */
+            z-index: 999; /* 置于文本框下方 */
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header>
+    <img src="picture/p1.jpg" alt="旅游插图">
+    <h1 style="margin-left: 200px;">2024国庆节江苏省旅游情况分析</h1>
+</header>
+
+<section>
+    <h2>1. 研究背景</h2>
+    <p>国庆节是中国最重要的节日之一，出行人口流动大幅增加，影响经济和社会各方面。</p>
+</section>
+
+<section>
+    <h2>2. 数据来源</h2>
+    <p>本文的数据主要来自国家统计局和交通运输部的相关统计数据。</p>
+</section>
+
+<section>
+    <h2>3. 全国人口流动数趋势</h2>
+    <div class="flex-container">
+        <table>
+            <tr>
+                <th style="width: 50%;">年份</th>
+                <th style="width: 50%;">出行人数（亿）</th>
+            </tr>
+            <tr>
+                <td>2024</td>
+                <td>7.65</td>
+            </tr>
+            <tr>
+                <td>2023</td>
+                <td>8.26</td>
+            </tr>
+            <tr>
+                <td>2022</td>
+                <td>4.22</td>
+            </tr>
+            <tr>
+                <td>2021</td>
+                <td>5.15</td>
+            </tr>
+            <tr>
+                <td>2020</td>
+                <td>6.37</td>
+            </tr>
+        </table>
+        <canvas id="myChart" width="400" height="260"></canvas>
+    </div>
+    <p>根据数据分析，由于疫情冲击，自2020年至2022年，出行人数逐年下降，于2023年疫情结束激增，而2024年数据低于2023年是由于2023年国庆与中秋“撞车”，时间变长。</p>
+    <p class="note">注：鼠标放在折线图点上可以显示数据。</p>
+</section>
+
+<section>
+    <h2>4. 江苏省各市接待游客量</h2>
+    <div style="display: flex; align-items: flex-start; position: relative;">
+        <table style="margin-right: 20px; width: 50%;">
+            <thead>
+                <tr>
+                    <th style="width: 50%;">城市</th>
+                    <th style="width: 50%;">接待游客量（万人次）</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>南京</td>
+                    <td>1543.8</td>
+                </tr>
+                <tr>
+                    <td>无锡</td>
+                    <td>370</td>
+                </tr>
+                <tr>
+                    <td>徐州</td>
+                    <td>675</td>
+                </tr>
+                <tr>
+                    <td>常州</td>
+                    <td>559.6</td>
+                </tr>
+                <tr>
+                    <td>苏州</td>
+                    <td>1285.6</td>
+                </tr>
+                <tr>
+                    <td>南通</td>
+                    <td>653.87</td>
+                </tr>
+                <tr>
+                    <td>连云港</td>
+                    <td>679.15</td>
+                </tr>
+                <tr>
+                    <td>淮安</td>
+                    <td>637.21</td>
+                </tr>
+                <tr>
+                    <td>盐城</td>
+                    <td>668.54</td>
+                </tr>
+                <tr>
+                    <td>扬州</td>
+                    <td>800</td>
+                </tr>
+                <tr>
+                    <td>镇江</td>
+                    <td>515.3</td>
+                </tr>
+                <tr>
+                    <td>泰州</td>
+                    <td>526.34</td>
+                </tr>
+                <tr>
+                    <td>宿迁</td>
+                    <td>174.36</td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="position: relative;">
+            <img src="picture/re.png" alt="热力图" style="width: 95%;">
+            <button class="circle-button" onclick="showxuzhou()" style="position: absolute; top: 22%; left: 33.5%;"></button>
+            <button class="circle-button" onclick="showhuaian()" style="position: absolute; top: 34%; left: 44%;"></button>
+            <button class="circle-button" onclick="showsuqian()" style="position: absolute; top: 27.5%; left: 40.5%;"></button>
+            <button class="circle-button" onclick="showyangzhou()" style="position: absolute; top: 40%; left: 50%;"></button>
+            <button class="wide-button" onclick="showlanyungang()" style="position: absolute; top: 18.5%; left: 45%;"></button>
+            <button class="long-button" onclick="showtaizhou()" style="position: absolute; top: 39%; left: 55%;"></button>
+            <button class="circle-button" onclick="showyancheng()" style="position: absolute; top: 29.5%; left: 56.5%;"></button>
+            <button class="circle-button" onclick="shownanjing()" style="position: absolute; top: 47%; left: 43%;"></button>
+            <button class="circle-button" onclick="showzhenjiang()" style="position: absolute; top: 47%; left: 49.5%;"></button>
+            <button class="wide-button" onclick="showchangzhou()" style="position: absolute; top: 51.5%; left: 50%;"></button>
+            <button class="little-button" onclick="showwuxi()" style="position: absolute; top: 55%; left: 53%;"></button>
+            <button class="little-button" onclick="showwuxi()" style="position: absolute; top: 52.5%; left: 58%;"></button>
+            <button class="circle-button" onclick="showsuzhou()" style="position: absolute; top: 55.5%; left: 59.5%;"></button>
+            <button class="circle-button" onclick="shownantong()" style="position: absolute; top: 44.5%; left: 62%;"></button>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="hidexuzhou()"></div>
+    <div class="modal" id="xuzhou">
+        <p>主要景点：云龙湖，汉文化景区</p>
+        <button onclick="hidexuzhou()">关闭</button>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="hidehuaian()"></div>
+    <div class="modal" id="huaian">
+        <p>主要景点：周恩来纪念馆，河下古镇，里运河文化长廊</p>
+        <button onclick="hidehuaian()">关闭</button>
+    </div>
+    
+    <div class="overlay" id="overlay" onclick="hidesuqian()"></div>
+    <div class="modal" id="suqian">
+        <p>主要景点：三台山森林公园，项王故里</p>
+        <button onclick="hidesuqian()">关闭</button>
+    </div>
+    
+    <div class="overlay" id="overlay" onclick="hideyangzhou()"></div>
+    <div class="modal" id="yangzhou">
+        <p>主要景点：瘦西湖</p>
+        <button onclick="hideyangzhou()">关闭</button>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="hidelanyungang()"></div>
+    <div class="modal" id="lanyungang">
+        <p>主要景点：花果山</p>
+        <button onclick="hidelanyungang()">关闭</button>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="hidetaizhou()"></div>
+    <div class="modal" id="taizhou">
+        <p>主要景点：梅园，望海楼</p>
+        <button onclick="hidetaizhou()">关闭</button>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="hideyancheng()"></div>
+    <div class="modal" id="yancheng">
+        <p>主要景点：大丰麋鹿自然保护区，丹顶鹤湿地保护区</p>
+        <button onclick="hideyancheng()">关闭</button>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="hidenanjing()"></div>
+    <div class="modal" id="nanjing">
+        <p>主要景点：夫子庙</p>
+        <button onclick="hidenanjing()">关闭</button>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="hidezhenjiang()"></div>
+    <div class="modal" id="zhenjiang">
+        <p>主要景点：梦溪园，金山寺</p>
+        <button onclick="hidezhenjiang()">关闭</button>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="hidechangzhou()"></div>
+    <div class="modal" id="changzhou">
+        <p>主要景点：常州恐龙园，天目湖</p>
+        <button onclick="hidechangzhou()">关闭</button>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="hidewuxi()"></div>
+    <div class="modal" id="wuxi">
+        <p>主要景点：太湖，鼋头渚</p>
+        <button onclick="hidewuxi()">关闭</button>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="hidesuzhou()"></div>
+    <div class="modal" id="suzhou">
+        <p>主要景点：拙政园，寒山寺</p>
+        <button onclick="hidesuzhou()">关闭</button>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="hidenantong()"></div>
+    <div class="modal" id="nantong">
+        <p>主要景点：崇福寺，天宁寺</p>
+        <button onclick="hidenantong()">关闭</button>
+    </div>
+    
+    <p>我们着重分析江苏省。可以看到今年江苏省的旅游业依旧火热，旅游人数整体呈现南多北少的趋势，这与城市的经济水平正相关。最火爆的出行地为苏州和南京。同时，近年来一些环境优雅，饮食独特的小城市也成为人们的热门选择，比如位于苏北的淮安。</p>
+    
+    <div style="display: flex; justify-content: center; gap: 10px; margin: 20px 0;">
+        <img src="picture/1.jpg" alt="图片1" style="width: 30%; height: 30%;">
+        <img src="picture/3.jpg" alt="图片2" style="width: 30%; height: 30%;">
+        
+    </div>
+    <div style="display: flex; justify-content: center; gap: 10px; margin: 20px 0;">
+        <img src="picture/2.png" alt="图片3" style="width: 30%; height: 30%;">
+        <img src="picture/4.jpg" alt="图片3" style="width: 30%; height: 30%;">
+        
+    </div>
+    <p>“襟吴带楚客多游，壮丽东南第一州。”自古淮安便是文人墨客神往之地，近年来大力发展旅游业，更有利于苏北振兴。今年淮安接待游客数达到600多万人次，热门景点包括河下古镇，周恩来纪念馆，萧湖公园，府衙博物馆等。</p>
+
+    <div style="position: relative;">
+        <svg width="30" height="20" style="position: absolute; z-index: 1;">
+            <polygon points="10,1 4,19.8 19,7.8 1,7.8 16,19.8"
+                     style="fill: rgb(255, 0, 0); stroke: none;" />
+        </svg>
+        <p style="position: relative; z-index: 0; margin-left: 40px;"> 
+            <a href="https://wlt.jiangsu.gov.cn/" target="_blank">数据来源：江苏省文化和旅游厅</a>
+        </p>
+    </div>
+    
+    
+    
+
+    </div>
+</section>
+<section>
+    <h2>4. 旅游消费情况</h2>
+    <h3>消费类型统计</h3>
+    <div style="display: flex; align-items: flex-start; justify-content: flex-start; margin-left: 0;">
+        <canvas id="consumptionChart" width="300" height="300" style="margin-right: 20px;margin-left: 300px;"></canvas>
+        <div>
+            <ul style="margin-right: 300px;">
+                <li><strong>住宿占比最高</strong>：占据了40%的比例，表明旅游者在旅行中的住宿需求是主要支出，反映了对舒适性和便利性的重视。</li>
+                <li><strong>饮食和交通支出相对较高</strong>：饮食占25%，交通占15%。这显示出游客在旅行过程中对美食体验的重视，以及交通便利性的重要性。</li>
+                <li><strong>购物和门票支出较低</strong>：购物和门票分别占10%和5%，说明游客在购物和景点门票上的支出相对较少，可能与旅游目的地的消费环境或游客的消费偏好有关。</li>
+                <li><strong>其他消费占比小</strong>：占5%的“其他”类消费表明，除了主要的住宿、饮食、交通等支出，旅游者在其他方面的支出并不显著。</li>
+                <li><strong>整体消费结构合理</strong>：整体来看，旅游者的消费结构较为合理，住宿、饮食、交通的支出比例较高，体现了游客在旅行中的基本需求优先级。</li>
+                <li><strong>消费多样化的潜力</strong>：虽然主要支出集中在住宿、饮食和交通，但购物和文化体验（如门票）占比较低，未来有潜力通过提升旅游活动和购物体验来增加这些领域的消费。</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+
+<section>
+    <h2>5. 探访南京</h2>
+    <p>南京作为省会，同时也是江苏省重要文旅城市，我们通过一个视频走近国庆的南京。</p>
+    
+    <!-- Video Element -->
+    <video width="600" controls style="display: block; margin: 0 auto;">
+        <source src="video/nj.mp4" type="video/mp4">
+        您的浏览器不支持 video 标签。
+    </video>
+    <p>可见大美南京，令人神往。</p>
+    <p class="note">注：由于原视频过大，此处展示缩短低画质版，原视频见<a href="https://www.bilibili.com/video/BV1fs411B7rs/?share_source=copy_web&vd_source=c4482cfaaa7a54a93210ef689f77d30c" target="_blank">种花乐未央的b站视频</a>。</p>
+</section>
+
+
+
+
+<section>
+    <h2>6. 结论与展望</h2>
+    <p>国庆节期间的旅游数据对社会和经济具有重要意义，未来需要更多的研究来优化出行规划。</p>
+</section>
+
+<section>
+    
+    
+    <div>
+        <h3>网站访问人次：<span id="visitCount">0</span></h3>
+    </div>
+
+    <div>
+        <h3>留言栏</h3>
+        <form id="messageForm">
+            <textarea id="message" name="message" placeholder="输入你的留言" required></textarea>
+            <button type="submit">提交留言</button>
+        </form>
+        <div id="messages"></div>
+    </div>
+    
+    
+
+
+
+    <div style="display: flex; align-items: flex-start; justify-content: flex-start; margin-left: 0;">
+        <div>
+            <svg width="30" height="45" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- Flower Petals -->
+                <ellipse cx="100" cy="50" rx="30" ry="60" fill="#FF69B4" transform="rotate(0,100,100)" />
+                <ellipse cx="100" cy="50" rx="30" ry="60" fill="#FF69B4" transform="rotate(60,100,100)" />
+                <ellipse cx="100" cy="50" rx="30" ry="60" fill="#FF69B4" transform="rotate(120,100,100)" />
+                <ellipse cx="100" cy="50" rx="30" ry="60" fill="#FF69B4" transform="rotate(180,100,100)" />
+                <ellipse cx="100" cy="50" rx="30" ry="60" fill="#FF69B4" transform="rotate(240,100,100)" />
+                <ellipse cx="100" cy="50" rx="30" ry="60" fill="#FF69B4" transform="rotate(300,100,100)" />
+                
+                <!-- Flower Center -->
+                <circle cx="100" cy="100" r="20" fill="#FFD700" />
+            </svg>
+        </div>
+    
+    
+        <p><a href="https://www.nankai.edu.cn" target="_blank">更多信息请访问我们的官网</a></p>
+    </div>
+</section>
+
+<script>
+    let visitCount = 520;
+
+    // 模拟访问人次统计
+    function incrementVisitCount() {
+        visitCount++;
+        document.getElementById('visitCount').innerText = visitCount;
+    }
+
+    // 留言功能
+    document.getElementById('messageForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const messageText = document.getElementById('message').value;
+        const messageTime = new Date().toLocaleString();
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.innerHTML = `<p><strong>${messageTime}</strong>: ${messageText}</p>`;
+        document.getElementById('messages').appendChild(messageDiv);
+
+        document.getElementById('message').value = ''; // 清空留言框
+    });
+
+    // 初始调用
+    incrementVisitCount();
+</script>
+
+
+<script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['2020', '2021', '2022', '2023', '2024'],
+            datasets: [{
+                label: '出行人数（亿）',
+                data: [6.37, 5.15, 4.22, 8.26, 7.65],
+                backgroundColor: 'rgba(188, 92, 29, 0.2)',
+                borderColor: 'rgba(188, 92, 29, 1)',
+                borderWidth: 2,
+                fill: true,
+            }]
+        },
+        options: {
+            responsive: false,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+<script>
+    function showxuzhou() {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('xuzhou').style.display = 'block';
+    }
+
+    function hidexuzhou() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('xuzhou').style.display = 'none';
+    }
+
+    function showhuaian() {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('huaian').style.display = 'block';
+    }
+
+    function hidehuaian() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('huaian').style.display = 'none';
+    }
+
+    function showsuqian() {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('suqian').style.display = 'block';
+    }
+
+    function hidesuqian() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('suqian').style.display = 'none';
+    }
+    
+    function showyangzhou() {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('yangzhou').style.display = 'block';
+    }
+
+    function hideyangzhou() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('yangzhou').style.display = 'none';
+    }
+
+    function showlanyungang() {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('lanyungang').style.display = 'block';
+    }
+
+    function hidelanyungang() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('lanyungang').style.display = 'none';
+    }
+
+    function showtaizhou() {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('taizhou').style.display = 'block';
+    }
+
+    function hidetaizhou() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('taizhou').style.display = 'none';
+    }
+
+    function showyancheng() {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('yancheng').style.display = 'block';
+    }
+
+    function hideyancheng() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('yancheng').style.display = 'none';
+    }
+
+    function shownanjing() {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('nanjing').style.display = 'block';
+    }
+
+    function hidenanjing() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('nanjing').style.display = 'none';
+    }
+
+    function showzhenjiang() {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('zhenjiang').style.display = 'block';
+    }
+
+    function hidezhenjiang() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('zhenjiang').style.display = 'none';
+    }
+
+    function showchangzhou() {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('changzhou').style.display = 'block';
+    }
+
+    function hidechangzhou() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('changzhou').style.display = 'none';
+    }
+
+    function showwuxi() {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('wuxi').style.display = 'block';
+    }
+
+    function hidewuxi() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('wuxi').style.display = 'none';
+    }
+
+    function showsuzhou() {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('suzhou').style.display = 'block';
+    }
+
+    function hidesuzhou() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('suzhou').style.display = 'none';
+    }
+
+    function shownantong() {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('nantong').style.display = 'block';
+    }
+
+    function hidenantong() {
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('nantong').style.display = 'none';
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx1 = document.getElementById('consumptionChart').getContext('2d');
+    const consumptionChart = new Chart(ctx1, {
+        type: 'pie',
+        data: {
+            labels: ['住宿', '饮食', '交通', '购物', '门票', '其他'],
+            datasets: [{
+                data: [40, 25, 15, 10, 5, 5], // 直接使用百分比
+                backgroundColor: ['#FF6F61', '#6FA3EF', '#FFB400', '#4CAF50', '#FF5722', '#9C27B0'],
+            }]
+        },
+        options: {
+            responsive: false,
+            maintainAspectRatio: false,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            // 在工具提示中显示百分比
+                            const dataset = tooltipItem.dataset;
+                            const total = dataset.data.reduce((a, b) => a + b, 0);
+                            const currentValue = dataset.data[tooltipItem.dataIndex];
+                            const percentage = ((currentValue / total) * 100).toFixed(2) + '%';
+                            return tooltipItem.label + ': ' + percentage;
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
